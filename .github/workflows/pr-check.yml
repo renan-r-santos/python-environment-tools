@@ -389,7 +389,7 @@ jobs:
     name: Tests in Containers
     container:
       image: ${{ matrix.image }}
-      options: --user=root
+      options: ${{ matrix.container_options }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -400,11 +400,13 @@ jobs:
             # For Tests again the container used in https://github.com/github/codespaces-jupyter
             image: mcr.microsoft.com/devcontainers/universal:2.11.1
             target: x86_64-unknown-linux-musl
+            container_options: --user=root
           - feature: ci-homebrew-container
             os: ubuntu-latest
             # For Homebrew in Ubuntu
             image: homebrew/brew
             target: x86_64-unknown-linux-musl
+            container_options: --user=linuxbrew
     steps:
       - name: Checkout
         uses: actions/checkout@v4
