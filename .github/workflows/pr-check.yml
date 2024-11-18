@@ -170,8 +170,6 @@ jobs:
       # region Pixi
       - name: Install Pixi
         uses: prefix-dev/setup-pixi@v0.8.1
-        with:
-          run-install: false
 
       - name: Create Pixi environments
         run: |
@@ -389,7 +387,7 @@ jobs:
     name: Tests in Containers
     container:
       image: ${{ matrix.image }}
-      options: ${{ matrix.container_options }}
+      options: --user=root
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -400,13 +398,11 @@ jobs:
             # For Tests again the container used in https://github.com/github/codespaces-jupyter
             image: mcr.microsoft.com/devcontainers/universal:2.11.1
             target: x86_64-unknown-linux-musl
-            container_options: --user=root
           - feature: ci-homebrew-container
             os: ubuntu-latest
             # For Homebrew in Ubuntu
             image: homebrew/brew
             target: x86_64-unknown-linux-musl
-            container_options: --user=linuxbrew
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -414,7 +410,7 @@ jobs:
       # Homebrew
       - name: Homebrew Python
         if: startsWith( matrix.image, 'homebrew')
-        run: brew install python@3.12 python@3.11
+        run: su - linuxbrew -c "brew install python@3.12 python@3.11"
         shell: bash
 
       # Rust
