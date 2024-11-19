@@ -410,8 +410,10 @@ jobs:
       # Homebrew
       - name: Homebrew Python
         if: startsWith( matrix.image, 'homebrew')
-        run: su - linuxbrew -c "brew install python@3.12 python@3.11"
+        run: brew install python@3.12 python@3.11
         shell: bash
+        env:
+          HOMEBREW_NO_INSTALL_FROM_API: 1
 
       # Rust
       - name: Rust Tool Chain setup
